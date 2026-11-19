@@ -1,0 +1,11 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)packages\GHIElectronics.TinyCLR.Networking.3.0.2.3000\build\net48\GHIElectronics.TinyCLR.Networking.props" Condition="Exists('$(MSBuildThisFileDirectory)packages\GHIElectronics.TinyCLR.Networking.3.0.2.3000\build\net48\GHIElectronics.TinyCLR.Networking.props')" />
+  <ItemGroup>
+	<Reference Include="GHIElectronics.TinyCLR.Networking, Version=3.0.2.3000, Culture=neutral, processorArchitecture=MSIL">
+	  <HintPath>$(MSBuildThisFileDirectory)packages\GHIElectronics.TinyCLR.Networking.3.0.2.3000\lib\net48\GHIElectronics.TinyCLR.Networking.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <Target Name="EnsureTinyCLRNetworkingPackage" BeforeTargets="PrepareForBuild">
+	<Error Condition="!Exists('$(MSBuildThisFileDirectory)packages\GHIElectronics.TinyCLR.Networking.3.0.2.3000\build\net48\GHIElectronics.TinyCLR.Networking.props')" Text="The GHIElectronics.TinyCLR.Networking 3.0.2.3000 package is missing. Restore NuGet packages before building." />
+  </Target>
+</Project>

@@ -88,7 +88,7 @@ namespace GHIElectronics.TinyCLR.Data.Json
 			{
 				_ when type.IsArray => JArray.Serialize( type, oSource, settings ),
 				_ when !type.IsArray => JObject.Serialize( type, oSource, settings ),
-				_ => null
+				_ => null!
 			};
 		}
 
@@ -275,7 +275,7 @@ namespace GHIElectronics.TinyCLR.Data.Json
 				var values = new ArrayList();
 
 				for( var i = 0; i < jarray.Length; i++ )
-					values.Add( PopulateObject( jarray[ i ], elementType, path + "[" + i + "]", factory ) );
+					values.Add( PopulateObject( jarray[ i ], elementType, path + "[" + i + "]", factory! ) );
 
 				values.CopyTo( array );
 
@@ -284,7 +284,7 @@ namespace GHIElectronics.TinyCLR.Data.Json
 
 			if( root is JObject jobj )
 			{
-				var instance = factory == null ? null : factory( path, root, type, null!, -1 );
+				var instance = factory! == null! ? null : factory( path, root, type, null!, -1 );
 				if( instance != null && type != null && !type.IsInstanceOfType( instance ) )
 					throw new Exception( "Factory returned an incompatible instance at " + path );
 
@@ -292,10 +292,10 @@ namespace GHIElectronics.TinyCLR.Data.Json
 				{
 					if( !jobj.Contains( "AddressBytes" ) || !( jobj[ "AddressBytes" ].Value is JArray addressBytes ) || addressBytes.Length != 4 )
 						throw new Exception( "Invalid IP address at " + path );
-					return new IPAddress( ( byte[] )PopulateObject( addressBytes, typeof( byte[] ), path + "/AddressBytes", factory ) );
+					return new IPAddress( ( byte[] )PopulateObject( addressBytes, typeof( byte[] ), path + "/AddressBytes", factory! ) );
 				}
 
-				instance ??= DefaultInstanceFactory( path, root, type, null!, -1 );
+				instance ??= DefaultInstanceFactory( path, root, type!, null!, -1 );
 				if( instance == null )
 					throw new Exception( "Failed to create target instance at " + path );
 
@@ -322,8 +322,8 @@ namespace GHIElectronics.TinyCLR.Data.Json
 
 					var childPath = path[ path.Length - 1 ] == '/' ? path + prop.Name : path + "/" + prop.Name;
 					var child = prop.Value is JArray
-						? PopulateObject( prop.Value, memberType, path, factory, prop.Name )
-						: PopulateObject( prop.Value, memberType, childPath, factory );
+						? PopulateObject( prop.Value, memberType, path, factory!, prop.Name )
+						: PopulateObject( prop.Value, memberType, childPath, factory! );
 					if( field != null )
 						field.SetValue( instance, child );
 					else
